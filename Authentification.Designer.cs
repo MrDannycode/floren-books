@@ -36,6 +36,10 @@ namespace WinFormsAppV3FlorenBooksV3
             linkLabel1 = new LinkLabel();
             button1 = new Button();
             button2 = new Button();
+            menuStrip1 = new MenuStrip();
+            editToolStripMenuItem = new ToolStripMenuItem();
+            deleteToolStripMenuItem = new ToolStripMenuItem();
+            menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // label1
@@ -85,7 +89,7 @@ namespace WinFormsAppV3FlorenBooksV3
             linkLabel1.AutoSize = true;
             linkLabel1.Location = new Point(96, 176);
             linkLabel1.Name = "linkLabel1";
-            linkLabel1.Size = new Size(178, 15);
+            linkLabel1.Size = new Size(175, 15);
             linkLabel1.TabIndex = 2;
             linkLabel1.TabStop = true;
             linkLabel1.Text = "Don't have an account? Sign Up";
@@ -99,7 +103,7 @@ namespace WinFormsAppV3FlorenBooksV3
             button1.TabIndex = 3;
             button1.Text = "Sign in";
             button1.UseVisualStyleBackColor = true;
-            button1.Click += this.button1_Click;
+            button1.Click += button1_Click;
             // 
             // button2
             // 
@@ -110,6 +114,27 @@ namespace WinFormsAppV3FlorenBooksV3
             button2.Text = "Reset";
             button2.UseVisualStyleBackColor = true;
             button2.Click += button2_Click;
+            // 
+            // menuStrip1
+            // 
+            menuStrip1.Items.AddRange(new ToolStripItem[] { editToolStripMenuItem, deleteToolStripMenuItem });
+            menuStrip1.Location = new Point(0, 0);
+            menuStrip1.Name = "menuStrip1";
+            menuStrip1.Size = new Size(384, 24);
+            menuStrip1.TabIndex = 4;
+            menuStrip1.Text = "menuStrip1";
+            // 
+            // editToolStripMenuItem
+            // 
+            editToolStripMenuItem.Name = "editToolStripMenuItem";
+            editToolStripMenuItem.Size = new Size(39, 20);
+            editToolStripMenuItem.Text = "edit";
+            // 
+            // deleteToolStripMenuItem
+            // 
+            deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
+            deleteToolStripMenuItem.Size = new Size(51, 20);
+            deleteToolStripMenuItem.Text = "delete";
             // 
             // Authentification
             // 
@@ -124,8 +149,12 @@ namespace WinFormsAppV3FlorenBooksV3
             Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(label1);
+            Controls.Add(menuStrip1);
+            MainMenuStrip = menuStrip1;
             Name = "Authentification";
             Text = "Authentification";
+            menuStrip1.ResumeLayout(false);
+            menuStrip1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -140,5 +169,8 @@ namespace WinFormsAppV3FlorenBooksV3
         private LinkLabel linkLabel1;
         private Button button1;
         private Button button2;
+        private MenuStrip menuStrip1;
+        private ToolStripMenuItem editToolStripMenuItem;
+        private ToolStripMenuItem deleteToolStripMenuItem;
     }
 }
