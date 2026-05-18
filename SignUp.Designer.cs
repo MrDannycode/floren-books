@@ -1,6 +1,6 @@
 namespace WinFormsAppV3FlorenBooksV3
 {
-    partial class Authentification
+    partial class SignUp
     {
         /// <summary>
         /// Required designer variable.
@@ -33,7 +33,6 @@ namespace WinFormsAppV3FlorenBooksV3
             label3 = new Label();
             textBox1 = new TextBox();
             textBox2 = new TextBox();
-            linkLabel1 = new LinkLabel();
             button1 = new Button();
             button2 = new Button();
             SuspendLayout();
@@ -41,7 +40,7 @@ namespace WinFormsAppV3FlorenBooksV3
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(114, 30);
+            label1.Location = new Point(118, 33);
             label1.Name = "label1";
             label1.Size = new Size(139, 15);
             label1.TabIndex = 0;
@@ -50,82 +49,74 @@ namespace WinFormsAppV3FlorenBooksV3
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(60, 86);
+            label2.Location = new Point(78, 76);
             label2.Name = "label2";
-            label2.Size = new Size(60, 15);
-            label2.TabIndex = 0;
-            label2.Text = "Username";
+            label2.Size = new Size(36, 15);
+            label2.TabIndex = 1;
+            label2.Text = "Email";
+            label2.Click += label2_Click;
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(60, 125);
+            label3.Location = new Point(78, 117);
             label3.Name = "label3";
             label3.Size = new Size(57, 15);
-            label3.TabIndex = 0;
+            label3.TabIndex = 2;
             label3.Text = "Password";
+            label3.Click += this.label3_Click;
             // 
             // textBox1
             // 
-            textBox1.Location = new Point(137, 82);
+            textBox1.Location = new Point(142, 70);
             textBox1.Name = "textBox1";
             textBox1.Size = new Size(100, 23);
-            textBox1.TabIndex = 1;
+            textBox1.TabIndex = 3;
+            textBox1.TextChanged += textBox1_TextChanged;
             // 
             // textBox2
             // 
-            textBox2.Location = new Point(137, 121);
+            textBox2.Location = new Point(142, 111);
             textBox2.Name = "textBox2";
             textBox2.PasswordChar = '*';
             textBox2.Size = new Size(100, 23);
-            textBox2.TabIndex = 1;
-            // 
-            // linkLabel1
-            // 
-            linkLabel1.AutoSize = true;
-            linkLabel1.Location = new Point(96, 176);
-            linkLabel1.Name = "linkLabel1";
-            linkLabel1.Size = new Size(178, 15);
-            linkLabel1.TabIndex = 2;
-            linkLabel1.TabStop = true;
-            linkLabel1.Text = "Don't have an account? Sign Up";
-            linkLabel1.LinkClicked += linkLabel1_LinkClicked;
+            textBox2.TabIndex = 3;
+            textBox2.TextChanged += this.textBox2_TextChanged;
             // 
             // button1
             // 
-            button1.Location = new Point(93, 211);
+            button1.Location = new Point(78, 186);
             button1.Name = "button1";
             button1.Size = new Size(75, 23);
-            button1.TabIndex = 3;
-            button1.Text = "Sign in";
+            button1.TabIndex = 4;
+            button1.Text = "Sign Up";
             button1.UseVisualStyleBackColor = true;
-            button1.Click += this.button1_Click;
+            button1.Click += button1_Click;
             // 
             // button2
             // 
-            button2.Location = new Point(201, 211);
+            button2.Location = new Point(182, 186);
             button2.Name = "button2";
-            button2.Size = new Size(75, 23);
-            button2.TabIndex = 3;
-            button2.Text = "Reset";
+            button2.Size = new Size(110, 23);
+            button2.TabIndex = 5;
+            button2.Text = "Back to Login";
             button2.UseVisualStyleBackColor = true;
             button2.Click += button2_Click;
             // 
-            // Authentification
+            // SignUp
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(384, 261);
             Controls.Add(button2);
             Controls.Add(button1);
-            Controls.Add(linkLabel1);
             Controls.Add(textBox2);
             Controls.Add(textBox1);
             Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(label1);
-            Name = "Authentification";
-            Text = "Authentification";
+            Name = "SignUp";
+            Text = "SignUp";
             ResumeLayout(false);
             PerformLayout();
         }
@@ -137,7 +128,6 @@ namespace WinFormsAppV3FlorenBooksV3
         private Label label3;
         private TextBox textBox1;
         private TextBox textBox2;
-        private LinkLabel linkLabel1;
         private Button button1;
         private Button button2;
     }
