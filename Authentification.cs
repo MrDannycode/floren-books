@@ -44,6 +44,13 @@ namespace WinFormsAppV3FlorenBooksV3
                     this.Hide();
                     dashboard.Show();
                 }
+                else if (user.Role == "libraryAdmin")
+                {
+                    var libraryDashboard = new Librarydashboard();
+                    libraryDashboard.FormClosed += (s, args) => this.Show();
+                    this.Hide();
+                    libraryDashboard.Show();
+                }
                 else
                 {
                     MessageBox.Show(
