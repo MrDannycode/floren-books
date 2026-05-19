@@ -162,5 +162,47 @@ namespace WinFormsAppV3FlorenBooksV3
 
             return users;
         }
+
+        // ----------------------------------------------------------------
+        // Modifications (Update / Delete)
+        // ----------------------------------------------------------------
+
+        /// <summary>
+        /// Updates the email of a given user ID.
+        /// </summary>
+        public static void UpdateUserEmail(int userId, string newEmail)
+        {
+            using var conn = DatabaseHelper.GetConnection();
+            using var cmd = new NpgsqlCommand(
+                "UPDATE users SET email = @newEmail WHERE id = @userId", conn);
+            cmd.Parameters.AddWithValue("newEmail", newEmail);
+            cmd.Parameters.AddWithValue("userId", userId);
+            cmd.ExecuteNonQuery();
+        }
+
+        /// <summary>
+        /// Updates the role of a given user ID.
+        /// </summary>
+        public static void UpdateUserRole(int userId, string newRole)
+        {
+            using var conn = DatabaseHelper.GetConnection();
+            using var cmd = new NpgsqlCommand(
+                "UPDATE users SET role = @newRole::user_role WHERE id = @userId", conn);
+            cmd.Parameters.AddWithValue("newRole", newRole);
+            cmd.Parameters.AddWithValue("userId", userId);
+            cmd.ExecuteNonQuery();
+        }
+
+        /// <summary>
+        /// Deletes a user from the database by ID.
+        /// </summary>
+        public static void DeleteUser(int userId)
+        {
+            using var conn = DatabaseHelper.GetConnection();
+            using var cmd = new NpgsqlCommand(
+                "DELETE FROM users WHERE id = @userId", conn);
+            cmd.Parameters.AddWithValue("userId", userId);
+            cmd.ExecuteNonQuery();
+        }
     }
 }

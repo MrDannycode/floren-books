@@ -29,8 +29,12 @@ namespace WinFormsAppV3FlorenBooksV3
         private void InitializeComponent()
         {
             dataGridView1 = new DataGridView();
+            colId = new DataGridViewTextBoxColumn();
             Email = new DataGridViewTextBoxColumn();
             role = new DataGridViewTextBoxColumn();
+            colEditEmail = new DataGridViewButtonColumn();
+            colChangeRole = new DataGridViewButtonColumn();
+            colDelete = new DataGridViewButtonColumn();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
@@ -40,26 +44,62 @@ namespace WinFormsAppV3FlorenBooksV3
             dataGridView1.AllowUserToDeleteRows = false;
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { Email, role });
-            dataGridView1.Location = new Point(162, 71);
+            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { colId, Email, role, colEditEmail, colChangeRole, colDelete });
+            dataGridView1.Location = new Point(-1, 0);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.ReadOnly = true;
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView1.Size = new Size(437, 197);
+            dataGridView1.Size = new Size(800, 449);
             dataGridView1.TabIndex = 0;
             dataGridView1.CellContentClick += dataGridView1_CellContentClick;
             // 
+            // colId
+            // 
+            colId.HeaderText = "Id";
+            colId.Name = "colId";
+            colId.ReadOnly = true;
+            colId.Visible = false;
+            // 
             // Email
             // 
+            Email.FillWeight = 45F;
             Email.HeaderText = "Email";
             Email.Name = "Email";
             Email.ReadOnly = true;
             // 
             // role
             // 
+            role.FillWeight = 25F;
             role.HeaderText = "Role";
             role.Name = "role";
             role.ReadOnly = true;
+            // 
+            // colEditEmail
+            // 
+            colEditEmail.FillWeight = 10F;
+            colEditEmail.HeaderText = "Edit Email";
+            colEditEmail.Name = "colEditEmail";
+            colEditEmail.ReadOnly = true;
+            colEditEmail.Text = "Edit";
+            colEditEmail.UseColumnTextForButtonValue = true;
+            // 
+            // colChangeRole
+            // 
+            colChangeRole.FillWeight = 10F;
+            colChangeRole.HeaderText = "Change Role";
+            colChangeRole.Name = "colChangeRole";
+            colChangeRole.ReadOnly = true;
+            colChangeRole.Text = "Role";
+            colChangeRole.UseColumnTextForButtonValue = true;
+            // 
+            // colDelete
+            // 
+            colDelete.FillWeight = 10F;
+            colDelete.HeaderText = "Delete";
+            colDelete.Name = "colDelete";
+            colDelete.ReadOnly = true;
+            colDelete.Text = "Delete";
+            colDelete.UseColumnTextForButtonValue = true;
             // 
             // Superdashboard
             // 
@@ -77,7 +117,11 @@ namespace WinFormsAppV3FlorenBooksV3
         #endregion
 
         private DataGridView dataGridView1;
+        private DataGridViewTextBoxColumn colId;
         private DataGridViewTextBoxColumn Email;
         private DataGridViewTextBoxColumn role;
+        private DataGridViewButtonColumn colEditEmail;
+        private DataGridViewButtonColumn colChangeRole;
+        private DataGridViewButtonColumn colDelete;
     }
 }
