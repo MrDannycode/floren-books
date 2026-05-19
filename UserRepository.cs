@@ -130,5 +130,37 @@ namespace WinFormsAppV3FlorenBooksV3
         {
             return BCrypt.Net.BCrypt.Verify(plainPassword, hashedPassword);
         }
+
+        // ----------------------------------------------------------------
+        // Admin queries
+        // ----------------------------------------------------------------
+
+        /// <summary>
+        /// Returns all users (email + role) ordered by creation date.
+        /// Used to populate the Superdashboard grid.
+        /// </summary>
+        public static List<User> GetAllUsers()
+        {
+            var users = new List<User>();
+
+            using var conn = DatabaseHelper.GetConnection();
+            using var cmd = new NpgsqlCommand(
+                "SELECT id, email, password, role, created_at FROM users ORDER BY created_at", conn);
+
+            using var reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                users.Add(new User
+                {
+                    Id = reader.GetInt32(0),
+                    Email = reader.GetString(1),
+                    Password = reader.GetString(2),
+                    Role = reader.GetString(3),
+                    CreatedAt = reader.GetDateTime(4)
+                });
+            }
+
+            return users;
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace WinFormsAppV3FlorenBooksV3
+namespace WinFormsAppV3FlorenBooksV3
 {
     partial class Superdashboard
     {
@@ -31,13 +31,7 @@
             dataGridView1 = new DataGridView();
             Email = new DataGridViewTextBoxColumn();
             role = new DataGridViewTextBoxColumn();
-            menuStrip1 = new MenuStrip();
-            editToolStripMenuItem = new ToolStripMenuItem();
-            promoteToolStripMenuItem = new ToolStripMenuItem();
-            demoteToolStripMenuItem = new ToolStripMenuItem();
-            deleteToolStripMenuItem = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
-            menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // dataGridView1
@@ -67,53 +61,17 @@
             role.Name = "role";
             role.ReadOnly = true;
             // 
-            // menuStrip1
-            // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { editToolStripMenuItem, promoteToolStripMenuItem, demoteToolStripMenuItem, deleteToolStripMenuItem });
-            menuStrip1.Location = new Point(0, 0);
-            menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(800, 24);
-            menuStrip1.TabIndex = 1;
-            menuStrip1.Text = "menuStrip1";
-            // 
-            // editToolStripMenuItem
-            // 
-            editToolStripMenuItem.Name = "editToolStripMenuItem";
-            editToolStripMenuItem.Size = new Size(39, 20);
-            editToolStripMenuItem.Text = "Edit";
-            // 
-            // promoteToolStripMenuItem
-            // 
-            promoteToolStripMenuItem.Name = "promoteToolStripMenuItem";
-            promoteToolStripMenuItem.Size = new Size(65, 20);
-            promoteToolStripMenuItem.Text = "Promote";
-            // 
-            // demoteToolStripMenuItem
-            // 
-            demoteToolStripMenuItem.Name = "demoteToolStripMenuItem";
-            demoteToolStripMenuItem.Size = new Size(61, 20);
-            demoteToolStripMenuItem.Text = "Demote";
-            // 
-            // deleteToolStripMenuItem
-            // 
-            deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            deleteToolStripMenuItem.Size = new Size(52, 20);
-            deleteToolStripMenuItem.Text = "Delete";
-            // 
             // Superdashboard
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
             Controls.Add(dataGridView1);
-            Controls.Add(menuStrip1);
             Name = "Superdashboard";
             Text = "Superdashboard";
+            Load += Superdashboard_Load;
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
-            menuStrip1.ResumeLayout(false);
-            menuStrip1.PerformLayout();
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
@@ -121,10 +79,5 @@
         private DataGridView dataGridView1;
         private DataGridViewTextBoxColumn Email;
         private DataGridViewTextBoxColumn role;
-        private MenuStrip menuStrip1;
-        private ToolStripMenuItem editToolStripMenuItem;
-        private ToolStripMenuItem promoteToolStripMenuItem;
-        private ToolStripMenuItem demoteToolStripMenuItem;
-        private ToolStripMenuItem deleteToolStripMenuItem;
     }
 }

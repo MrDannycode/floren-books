@@ -36,14 +36,22 @@ namespace WinFormsAppV3FlorenBooksV3
                     return;
                 }
 
-                MessageBox.Show(
-                    $"Welcome, {user.Email}!\nRole: {user.Role}",
-                    "Login Successful",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
-
-                // TODO: Navigate to the appropriate dashboard based on user.Role
-                // e.g.: if (user.Role == "superAdmin") { new AdminDashboard().Show(); this.Hide(); }
+                // Navigate to the appropriate dashboard based on role
+                if (user.Role == "superAdmin")
+                {
+                    var dashboard = new Superdashboard(user);
+                    dashboard.FormClosed += (s, args) => this.Show();
+                    this.Hide();
+                    dashboard.Show();
+                }
+                else
+                {
+                    MessageBox.Show(
+                        $"Welcome, {user.Email}!\nRole: {user.Role}",
+                        "Login Successful",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+                }
             }
             catch (Exception ex)
             {
