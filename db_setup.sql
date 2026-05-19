@@ -23,3 +23,14 @@ CREATE TABLE IF NOT EXISTS users (
     role        user_role NOT NULL DEFAULT 'user',
     created_at  TIMESTAMP DEFAULT NOW()
 );
+
+-- Books table
+CREATE TABLE IF NOT EXISTS books (
+    id SERIAL PRIMARY KEY,
+    titlu VARCHAR(255) NOT NULL,
+    autor VARCHAR(255) NOT NULL,
+    editura VARCHAR(255),
+    anul INT,
+    pret DECIMAL(10, 2),
+    created_at TIMESTAMP DEFAULT NOW()
+);
