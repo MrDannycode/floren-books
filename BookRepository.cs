@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Npgsql;
 using WinFormsAppV3FlorenBooksV3.Models;
 
@@ -38,6 +39,30 @@ namespace WinFormsAppV3FlorenBooksV3
             command.Parameters.AddWithValue("pret", book.Pret.HasValue ? book.Pret.Value : DBNull.Value);
 
             command.ExecuteNonQuery();
+        }
+        public static List<Book> GetAllBooks()
+        {
+            var books = new List<Book>();
+            using var connection = DatabaseHelper.GetConnection();
+            var query = "SELECT id, titlu, autor, editura, anul, pret FROM books ORDER BY id";
+            using var command = new NpgsqlCommand(query, connection);
+            using var reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                var book = new Book
+                {
+                    Id = reader.GetInt32(0),
+                    Titlu = reader.GetString(1),
+                    Autor = reader.GetString(2),
+                    Editura = reader.IsDBNull(3) ? null : reader.GetString(3),
+                    Anul = reader.IsDBNull(4) ? (int?)null : reader.GetInt32(4),
+                    Pret = reader.IsDBNull(5) ? (decimal?)null : reader.GetDecimal(5)
+                };
+                books.Add(book);
+            }
+
+            return books;
         }
     }
 }
