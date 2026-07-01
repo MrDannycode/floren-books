@@ -1,4 +1,4 @@
-﻿namespace WinFormsAppV3FlorenBooksV3
+namespace WinFormsAppV3FlorenBooksV3
 {
     partial class Userdashboard
     {
@@ -29,11 +29,14 @@
         private void InitializeComponent()
         {
             dataGridView1 = new DataGridView();
+            colId = new DataGridViewTextBoxColumn();
             Titlu = new DataGridViewTextBoxColumn();
             Autor = new DataGridViewTextBoxColumn();
             Editura = new DataGridViewTextBoxColumn();
             Anul = new DataGridViewTextBoxColumn();
             Pret = new DataGridViewTextBoxColumn();
+            colBuy = new DataGridViewButtonColumn();
+            colBorrow = new DataGridViewButtonColumn();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
@@ -43,13 +46,21 @@
             dataGridView1.AllowUserToDeleteRows = false;
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { Titlu, Autor, Editura, Anul, Pret });
+            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { colId, Titlu, Autor, Editura, Anul, Pret, colBuy, colBorrow });
             dataGridView1.Location = new Point(12, 12);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.ReadOnly = true;
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridView1.Size = new Size(776, 426);
             dataGridView1.TabIndex = 0;
+            dataGridView1.CellContentClick += dataGridView1_CellContentClick;
+            // 
+            // colId
+            // 
+            colId.HeaderText = "Id";
+            colId.Name = "colId";
+            colId.ReadOnly = true;
+            colId.Visible = false;
             // 
             // Titlu
             // 
@@ -81,6 +92,22 @@
             Pret.Name = "Pret";
             Pret.ReadOnly = true;
             // 
+            // colBuy
+            // 
+            colBuy.HeaderText = "Buy";
+            colBuy.Name = "colBuy";
+            colBuy.ReadOnly = true;
+            colBuy.Text = "Buy";
+            colBuy.UseColumnTextForButtonValue = true;
+            // 
+            // colBorrow
+            // 
+            colBorrow.HeaderText = "Borrow";
+            colBorrow.Name = "colBorrow";
+            colBorrow.ReadOnly = true;
+            colBorrow.Text = "Borrow";
+            colBorrow.UseColumnTextForButtonValue = true;
+            // 
             // Userdashboard
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -96,10 +123,13 @@
         #endregion
 
         private DataGridView dataGridView1;
+        private DataGridViewTextBoxColumn colId;
         private DataGridViewTextBoxColumn Titlu;
         private DataGridViewTextBoxColumn Autor;
         private DataGridViewTextBoxColumn Editura;
         private DataGridViewTextBoxColumn Anul;
         private DataGridViewTextBoxColumn Pret;
+        private DataGridViewButtonColumn colBuy;
+        private DataGridViewButtonColumn colBorrow;
     }
 }

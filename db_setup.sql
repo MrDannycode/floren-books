@@ -34,3 +34,20 @@ CREATE TABLE IF NOT EXISTS books (
     pret DECIMAL(10, 2),
     created_at TIMESTAMP DEFAULT NOW()
 );
+
+-- Purchased books table
+CREATE TABLE IF NOT EXISTS purchased_books (
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    book_id INT NOT NULL REFERENCES books(id) ON DELETE CASCADE,
+    purchase_date TIMESTAMP DEFAULT NOW()
+);
+
+-- Borrowed books table
+CREATE TABLE IF NOT EXISTS borrowed_books (
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    book_id INT NOT NULL REFERENCES books(id) ON DELETE CASCADE,
+    borrow_date TIMESTAMP DEFAULT NOW(),
+    return_date TIMESTAMP
+);

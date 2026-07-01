@@ -7,19 +7,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WinFormsAppV3FlorenBooksV3.Models;
 
 namespace WinFormsAppV3FlorenBooksV3
 {
     public partial class Userdashboard : Form
     {
-        public Userdashboard()
+        private readonly User _currentUser;
+
+        public Userdashboard(User currentUser)
         {
             InitializeComponent();
+            _currentUser = currentUser;
             this.Load += Userdashboard_Load;
         }
 
         private void Userdashboard_Load(object sender, EventArgs e)
         {
+            this.Text = $"User Dashboard — {_currentUser.Email}";
             LoadBooks();
         }
 
@@ -32,12 +37,48 @@ namespace WinFormsAppV3FlorenBooksV3
 
                 foreach (var book in books)
                 {
-                    dataGridView1.Rows.Add(book.Titlu, book.Autor, book.Editura, book.Anul, book.Pret);
+                    dataGridView1.Rows.Add(book.Id, book.Titlu, book.Autor, book.Editura, book.Anul, book.Pret);
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Failed to load books: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            string colName = dataGridView1.Columns[e.ColumnIndex].Name;
+            var row = dataGridView1.Rows[e.RowIndex];
+            string titlu = row.Cells["Titlu"].Value?.ToString() ?? "Unknown";
+            int bookId = Convert.ToInt32(row.Cells["colId"].Value);
+
+            try
+            {
+                if (colName == "colBuy")
+                {
+                    var confirm = MessageBox.Show($"Are you sure you want to buy '{titlu}'?", "Confirm Purchase", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (confirm == DialogResult.Yes)
+                    {
+                        BookRepository.BuyBook(_currentUser.Id, bookId);
+                        MessageBox.Show($"You have successfully purchased '{titlu}'.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+                else if (colName == "colBorrow")
+                {
+                    var confirm = MessageBox.Show($"Are you sure you want to borrow '{titlu}'?", "Confirm Borrow", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (confirm == DialogResult.Yes)
+                    {
+                        BookRepository.BorrowBook(_currentUser.Id, bookId);
+                        MessageBox.Show($"You have successfully borrowed '{titlu}'.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Transaction failed: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

@@ -20,6 +20,21 @@ namespace WinFormsAppV3FlorenBooksV3
                     pret DECIMAL(10, 2),
                     created_at TIMESTAMP DEFAULT NOW()
                 );
+
+                CREATE TABLE IF NOT EXISTS purchased_books (
+                    id SERIAL PRIMARY KEY,
+                    user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                    book_id INT NOT NULL REFERENCES books(id) ON DELETE CASCADE,
+                    purchase_date TIMESTAMP DEFAULT NOW()
+                );
+
+                CREATE TABLE IF NOT EXISTS borrowed_books (
+                    id SERIAL PRIMARY KEY,
+                    user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                    book_id INT NOT NULL REFERENCES books(id) ON DELETE CASCADE,
+                    borrow_date TIMESTAMP DEFAULT NOW(),
+                    return_date TIMESTAMP
+                );
             ", connection);
             command.ExecuteNonQuery();
         }
@@ -63,6 +78,77 @@ namespace WinFormsAppV3FlorenBooksV3
             }
 
             return books;
+        }
+
+        public static void BuyBook(int userId, int bookId)
+        {
+            using var connection = DatabaseHelper.GetConnection();
+            var query = @"
+                INSERT INTO purchased_books (user_id, book_id)
+                VALUES (@userId, @bookId)";
+
+            using var command = new NpgsqlCommand(query, connection);
+            command.Parameters.AddWithValue("userId", userId);
+            command.Parameters.AddWithValue("bookId", bookId);
+
+            command.ExecuteNonQuery();
+        }
+
+        public static void BorrowBook(int userId, int bookId)
+        {
+            using var connection = DatabaseHelper.GetConnection();
+            var query = @"
+                INSERT INTO borrowed_books (user_id, book_id)
+                VALUES (@userId, @bookId)";
+
+            using var command = new NpgsqlCommand(query, connection);
+            command.Parameters.AddWithValue("userId", userId);
+            command.Parameters.AddWithValue("bookId", bookId);
+
+            command.ExecuteNonQuery();
+        }
+
+        public static List<BorrowedBook> GetBorrowedBooks()
+        {
+            var borrowedBooks = new List<BorrowedBook>();
+            using var connection = DatabaseHelper.GetConnection();
+            var query = @"
+                SELECT bb.id, u.email, b.titlu, b.autor, bb.borrow_date, bb.return_date
+                FROM borrowed_books bb
+                INNER JOIN users u ON u.id = bb.user_id
+                INNER JOIN books b ON b.id = bb.book_id
+                ORDER BY bb.return_date IS NOT NULL, bb.borrow_date DESC";
+
+            using var command = new NpgsqlCommand(query, connection);
+            using var reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                borrowedBooks.Add(new BorrowedBook
+                {
+                    Id = reader.GetInt32(0),
+                    UserEmail = reader.GetString(1),
+                    BookTitle = reader.GetString(2),
+                    BookAuthor = reader.GetString(3),
+                    BorrowDate = reader.GetDateTime(4),
+                    ReturnDate = reader.IsDBNull(5) ? null : reader.GetDateTime(5)
+                });
+            }
+
+            return borrowedBooks;
+        }
+
+        public static void MarkBorrowedBookReturned(int borrowedBookId)
+        {
+            using var connection = DatabaseHelper.GetConnection();
+            var query = @"
+                UPDATE borrowed_books
+                SET return_date = NOW()
+                WHERE id = @borrowedBookId AND return_date IS NULL";
+
+            using var command = new NpgsqlCommand(query, connection);
+            command.Parameters.AddWithValue("borrowedBookId", borrowedBookId);
+            command.ExecuteNonQuery();
         }
     }
 }

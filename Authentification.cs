@@ -51,9 +51,16 @@ namespace WinFormsAppV3FlorenBooksV3
                     this.Hide();
                     libraryDashboard.Show();
                 }
+                else if (user.Role == "borrowAdmin")
+                {
+                    var borrowDashboard = new Borrowdashboard(user);
+                    borrowDashboard.FormClosed += (s, args) => this.Show();
+                    this.Hide();
+                    borrowDashboard.Show();
+                }
                 else if (user.Role == "user")
                 {
-                    var userDashboard = new Userdashboard();
+                    var userDashboard = new Userdashboard(user);
                     userDashboard.FormClosed += (s, args) => this.Show();
                     this.Hide();
                     userDashboard.Show();
