@@ -37,7 +37,7 @@ namespace WinFormsAppV3FlorenBooksV3
 
                 foreach (var book in books)
                 {
-                    dataGridView1.Rows.Add(book.Id, book.Titlu, book.Autor, book.Editura, book.Anul, book.Pret);
+                    dataGridView1.Rows.Add(book.Id, book.Titlu, book.Autor, book.Editura, book.Anul, book.Pret, book.Status);
                 }
             }
             catch (Exception ex)
@@ -68,11 +68,19 @@ namespace WinFormsAppV3FlorenBooksV3
                 }
                 else if (colName == "colBorrow")
                 {
+                    string status = row.Cells["Status"].Value?.ToString() ?? "";
+                    if (status == "Imprumutata")
+                    {
+                        MessageBox.Show($"'{titlu}' este deja imprumutata.", "Indisponibila", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return;
+                    }
+
                     var confirm = MessageBox.Show($"Are you sure you want to borrow '{titlu}'?", "Confirm Borrow", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     if (confirm == DialogResult.Yes)
                     {
                         BookRepository.BorrowBook(_currentUser.Id, bookId);
                         MessageBox.Show($"You have successfully borrowed '{titlu}'.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        LoadBooks();
                     }
                 }
             }

@@ -59,7 +59,25 @@ namespace WinFormsAppV3FlorenBooksV3
         {
             var books = new List<Book>();
             using var connection = DatabaseHelper.GetConnection();
-            var query = "SELECT id, titlu, autor, editura, anul, pret FROM books ORDER BY id";
+            var query = @"
+                SELECT
+                    b.id,
+                    b.titlu,
+                    b.autor,
+                    b.editura,
+                    b.anul,
+                    b.pret,
+                    CASE
+                        WHEN EXISTS (
+                            SELECT 1
+                            FROM borrowed_books bb
+                            WHERE bb.book_id = b.id AND bb.return_date IS NULL
+                        )
+                        THEN 'Imprumutata'
+                        ELSE 'Disponibila'
+                    END AS status
+                FROM books b
+                ORDER BY b.id";
             using var command = new NpgsqlCommand(query, connection);
             using var reader = command.ExecuteReader();
 
@@ -72,7 +90,8 @@ namespace WinFormsAppV3FlorenBooksV3
                     Autor = reader.GetString(2),
                     Editura = reader.IsDBNull(3) ? null : reader.GetString(3),
                     Anul = reader.IsDBNull(4) ? (int?)null : reader.GetInt32(4),
-                    Pret = reader.IsDBNull(5) ? (decimal?)null : reader.GetDecimal(5)
+                    Pret = reader.IsDBNull(5) ? (decimal?)null : reader.GetDecimal(5),
+                    Status = reader.GetString(6)
                 };
                 books.Add(book);
             }

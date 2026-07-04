@@ -35,6 +35,7 @@ namespace WinFormsAppV3FlorenBooksV3
             Editura = new DataGridViewTextBoxColumn();
             Anul = new DataGridViewTextBoxColumn();
             Pret = new DataGridViewTextBoxColumn();
+            Status = new DataGridViewTextBoxColumn();
             colBuy = new DataGridViewButtonColumn();
             colBorrow = new DataGridViewButtonColumn();
             buttonExportCsv = new Button();
@@ -47,7 +48,7 @@ namespace WinFormsAppV3FlorenBooksV3
             dataGridView1.AllowUserToDeleteRows = false;
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { colId, Titlu, Autor, Editura, Anul, Pret, colBuy, colBorrow });
+            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { colId, Titlu, Autor, Editura, Anul, Pret, Status, colBuy, colBorrow });
             dataGridView1.Location = new Point(12, 41);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.ReadOnly = true;
@@ -92,6 +93,12 @@ namespace WinFormsAppV3FlorenBooksV3
             Pret.HeaderText = "Pret";
             Pret.Name = "Pret";
             Pret.ReadOnly = true;
+            // 
+            // Status
+            // 
+            Status.HeaderText = "Status";
+            Status.Name = "Status";
+            Status.ReadOnly = true;
             // 
             // colBuy
             // 
@@ -141,6 +148,7 @@ namespace WinFormsAppV3FlorenBooksV3
         private DataGridViewTextBoxColumn Editura;
         private DataGridViewTextBoxColumn Anul;
         private DataGridViewTextBoxColumn Pret;
+        private DataGridViewTextBoxColumn Status;
         private DataGridViewButtonColumn colBuy;
         private DataGridViewButtonColumn colBorrow;
         private Button buttonExportCsv;
