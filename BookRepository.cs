@@ -99,6 +99,65 @@ namespace WinFormsAppV3FlorenBooksV3
             return books;
         }
 
+        public static List<Book> GetBooksForUser(int userId)
+        {
+            var books = new List<Book>();
+            using var connection = DatabaseHelper.GetConnection();
+            var query = @"
+                SELECT
+                    b.id,
+                    b.titlu,
+                    b.autor,
+                    b.editura,
+                    b.anul,
+                    b.pret,
+                    CASE
+                        WHEN EXISTS (
+                            SELECT 1
+                            FROM borrowed_books bb
+                            WHERE bb.book_id = b.id
+                                AND bb.user_id = @userId
+                                AND bb.return_date IS NULL
+                        )
+                        THEN 'Imprumutata'
+                        ELSE 'Cumparata'
+                    END AS status
+                FROM books b
+                WHERE EXISTS (
+                    SELECT 1
+                    FROM purchased_books pb
+                    WHERE pb.book_id = b.id AND pb.user_id = @userId
+                )
+                OR EXISTS (
+                    SELECT 1
+                    FROM borrowed_books bb
+                    WHERE bb.book_id = b.id
+                        AND bb.user_id = @userId
+                        AND bb.return_date IS NULL
+                )
+                ORDER BY b.titlu";
+
+            using var command = new NpgsqlCommand(query, connection);
+            command.Parameters.AddWithValue("userId", userId);
+            using var reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                books.Add(new Book
+                {
+                    Id = reader.GetInt32(0),
+                    Titlu = reader.GetString(1),
+                    Autor = reader.GetString(2),
+                    Editura = reader.IsDBNull(3) ? null : reader.GetString(3),
+                    Anul = reader.IsDBNull(4) ? (int?)null : reader.GetInt32(4),
+                    Pret = reader.IsDBNull(5) ? (decimal?)null : reader.GetDecimal(5),
+                    Status = reader.GetString(6)
+                });
+            }
+
+            return books;
+        }
+
         public static void BuyBook(int userId, int bookId)
         {
             using var connection = DatabaseHelper.GetConnection();

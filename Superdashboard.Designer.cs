@@ -36,6 +36,8 @@ namespace WinFormsAppV3FlorenBooksV3
             colChangeRole = new DataGridViewButtonColumn();
             colDelete = new DataGridViewButtonColumn();
             buttonExportCsv = new Button();
+            buttonUsers = new Button();
+            buttonBooks = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
@@ -104,7 +106,8 @@ namespace WinFormsAppV3FlorenBooksV3
             // 
             // buttonExportCsv
             // 
-            buttonExportCsv.Location = new Point(12, 12);
+            buttonExportCsv.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            buttonExportCsv.Location = new Point(698, 12);
             buttonExportCsv.Name = "buttonExportCsv";
             buttonExportCsv.Size = new Size(90, 23);
             buttonExportCsv.TabIndex = 1;
@@ -112,11 +115,33 @@ namespace WinFormsAppV3FlorenBooksV3
             buttonExportCsv.UseVisualStyleBackColor = true;
             buttonExportCsv.Click += buttonExportCsv_Click;
             // 
+            // buttonUsers
+            // 
+            buttonUsers.Location = new Point(12, 12);
+            buttonUsers.Name = "buttonUsers";
+            buttonUsers.Size = new Size(90, 23);
+            buttonUsers.TabIndex = 2;
+            buttonUsers.Text = "Utilizatori";
+            buttonUsers.UseVisualStyleBackColor = true;
+            buttonUsers.Click += buttonUsers_Click;
+            // 
+            // buttonBooks
+            // 
+            buttonBooks.Location = new Point(108, 12);
+            buttonBooks.Name = "buttonBooks";
+            buttonBooks.Size = new Size(90, 23);
+            buttonBooks.TabIndex = 3;
+            buttonBooks.Text = "Carti";
+            buttonBooks.UseVisualStyleBackColor = true;
+            buttonBooks.Click += buttonBooks_Click;
+            // 
             // Superdashboard
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(buttonBooks);
+            Controls.Add(buttonUsers);
             Controls.Add(buttonExportCsv);
             Controls.Add(dataGridView1);
             Name = "Superdashboard";
@@ -136,5 +161,7 @@ namespace WinFormsAppV3FlorenBooksV3
         private DataGridViewButtonColumn colChangeRole;
         private DataGridViewButtonColumn colDelete;
         private Button buttonExportCsv;
+        private Button buttonUsers;
+        private Button buttonBooks;
     }
 }

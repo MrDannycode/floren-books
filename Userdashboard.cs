@@ -14,6 +14,7 @@ namespace WinFormsAppV3FlorenBooksV3
     public partial class Userdashboard : Form
     {
         private readonly User _currentUser;
+        private bool _showingMyBooks;
 
         public Userdashboard(User currentUser)
         {
@@ -33,17 +34,45 @@ namespace WinFormsAppV3FlorenBooksV3
             try
             {
                 var books = BookRepository.GetAllBooks();
-                dataGridView1.Rows.Clear();
-
-                foreach (var book in books)
-                {
-                    dataGridView1.Rows.Add(book.Id, book.Titlu, book.Autor, book.Editura, book.Anul, book.Pret, book.Status);
-                }
+                _showingMyBooks = false;
+                SetBookActionColumnsVisible(true);
+                PopulateBooksGrid(books);
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Failed to load books: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void LoadMyBooks()
+        {
+            try
+            {
+                var books = BookRepository.GetBooksForUser(_currentUser.Id);
+                _showingMyBooks = true;
+                SetBookActionColumnsVisible(false);
+                PopulateBooksGrid(books);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to load your books: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void PopulateBooksGrid(IEnumerable<Book> books)
+        {
+            dataGridView1.Rows.Clear();
+
+            foreach (var book in books)
+            {
+                dataGridView1.Rows.Add(book.Id, book.Titlu, book.Autor, book.Editura, book.Anul, book.Pret, book.Status);
+            }
+        }
+
+        private void SetBookActionColumnsVisible(bool visible)
+        {
+            colBuy.Visible = visible;
+            colBorrow.Visible = visible;
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -64,6 +93,10 @@ namespace WinFormsAppV3FlorenBooksV3
                     {
                         BookRepository.BuyBook(_currentUser.Id, bookId);
                         MessageBox.Show($"You have successfully purchased '{titlu}'.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        if (_showingMyBooks)
+                        {
+                            LoadMyBooks();
+                        }
                     }
                 }
                 else if (colName == "colBorrow")
@@ -92,7 +125,17 @@ namespace WinFormsAppV3FlorenBooksV3
 
         private void buttonExportCsv_Click(object sender, EventArgs e)
         {
-            CsvExportHelper.ExportDataGridView(dataGridView1, "carti.csv");
+            CsvExportHelper.ExportDataGridView(dataGridView1, _showingMyBooks ? "cartile_mele.csv" : "carti.csv");
+        }
+
+        private void buttonAllBooks_Click(object sender, EventArgs e)
+        {
+            LoadBooks();
+        }
+
+        private void buttonMyBooks_Click(object sender, EventArgs e)
+        {
+            LoadMyBooks();
         }
     }
 }

@@ -39,6 +39,8 @@ namespace WinFormsAppV3FlorenBooksV3
             colBuy = new DataGridViewButtonColumn();
             colBorrow = new DataGridViewButtonColumn();
             buttonExportCsv = new Button();
+            buttonAllBooks = new Button();
+            buttonMyBooks = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
@@ -118,7 +120,8 @@ namespace WinFormsAppV3FlorenBooksV3
             // 
             // buttonExportCsv
             // 
-            buttonExportCsv.Location = new Point(12, 12);
+            buttonExportCsv.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            buttonExportCsv.Location = new Point(698, 12);
             buttonExportCsv.Name = "buttonExportCsv";
             buttonExportCsv.Size = new Size(90, 23);
             buttonExportCsv.TabIndex = 1;
@@ -126,11 +129,33 @@ namespace WinFormsAppV3FlorenBooksV3
             buttonExportCsv.UseVisualStyleBackColor = true;
             buttonExportCsv.Click += buttonExportCsv_Click;
             // 
+            // buttonAllBooks
+            // 
+            buttonAllBooks.Location = new Point(12, 12);
+            buttonAllBooks.Name = "buttonAllBooks";
+            buttonAllBooks.Size = new Size(90, 23);
+            buttonAllBooks.TabIndex = 2;
+            buttonAllBooks.Text = "Toate cartile";
+            buttonAllBooks.UseVisualStyleBackColor = true;
+            buttonAllBooks.Click += buttonAllBooks_Click;
+            // 
+            // buttonMyBooks
+            // 
+            buttonMyBooks.Location = new Point(108, 12);
+            buttonMyBooks.Name = "buttonMyBooks";
+            buttonMyBooks.Size = new Size(90, 23);
+            buttonMyBooks.TabIndex = 3;
+            buttonMyBooks.Text = "Cartile mele";
+            buttonMyBooks.UseVisualStyleBackColor = true;
+            buttonMyBooks.Click += buttonMyBooks_Click;
+            // 
             // Userdashboard
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(buttonMyBooks);
+            Controls.Add(buttonAllBooks);
             Controls.Add(buttonExportCsv);
             Controls.Add(dataGridView1);
             Name = "Userdashboard";
@@ -152,5 +177,7 @@ namespace WinFormsAppV3FlorenBooksV3
         private DataGridViewButtonColumn colBuy;
         private DataGridViewButtonColumn colBorrow;
         private Button buttonExportCsv;
+        private Button buttonAllBooks;
+        private Button buttonMyBooks;
     }
 }

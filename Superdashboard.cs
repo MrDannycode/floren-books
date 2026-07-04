@@ -7,6 +7,7 @@ namespace WinFormsAppV3FlorenBooksV3
     public partial class Superdashboard : Form
     {
         private readonly User _currentUser;
+        private bool _showingBooks;
 
         // Available roles — must match the PostgreSQL user_role enum
         private static readonly string[] Roles =
@@ -30,10 +31,10 @@ namespace WinFormsAppV3FlorenBooksV3
 
         private void LoadUsers()
         {
-            dataGridView1.Rows.Clear();
-
             try
             {
+                _showingBooks = false;
+                ConfigureUsersGrid();
                 var users = UserRepository.GetAllUsers();
                 foreach (var u in users)
                     dataGridView1.Rows.Add(u.Id, u.Email, u.Role);
@@ -45,6 +46,93 @@ namespace WinFormsAppV3FlorenBooksV3
             }
         }
 
+        private void LoadBooks()
+        {
+            try
+            {
+                _showingBooks = true;
+                ConfigureBooksGrid();
+                var books = BookRepository.GetAllBooks();
+                foreach (var book in books)
+                {
+                    dataGridView1.Rows.Add(book.Id, book.Titlu, book.Autor, book.Editura, book.Anul, book.Pret, book.Status);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to load books:\n{ex.Message}",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void ConfigureUsersGrid()
+        {
+            dataGridView1.Columns.Clear();
+            dataGridView1.Rows.Clear();
+
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                HeaderText = "Id",
+                Name = "colId",
+                Visible = false
+            });
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                FillWeight = 45F,
+                HeaderText = "Email",
+                Name = "Email"
+            });
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                FillWeight = 25F,
+                HeaderText = "Role",
+                Name = "role"
+            });
+            dataGridView1.Columns.Add(new DataGridViewButtonColumn
+            {
+                FillWeight = 10F,
+                HeaderText = "Edit Email",
+                Name = "colEditEmail",
+                Text = "Edit",
+                UseColumnTextForButtonValue = true
+            });
+            dataGridView1.Columns.Add(new DataGridViewButtonColumn
+            {
+                FillWeight = 10F,
+                HeaderText = "Change Role",
+                Name = "colChangeRole",
+                Text = "Role",
+                UseColumnTextForButtonValue = true
+            });
+            dataGridView1.Columns.Add(new DataGridViewButtonColumn
+            {
+                FillWeight = 10F,
+                HeaderText = "Delete",
+                Name = "colDelete",
+                Text = "Delete",
+                UseColumnTextForButtonValue = true
+            });
+        }
+
+        private void ConfigureBooksGrid()
+        {
+            dataGridView1.Columns.Clear();
+            dataGridView1.Rows.Clear();
+
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                HeaderText = "Id",
+                Name = "colId",
+                Visible = false
+            });
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Titlu", Name = "Titlu" });
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Autor", Name = "Autor" });
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Editura", Name = "Editura" });
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Anul", Name = "Anul" });
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Pret", Name = "Pret" });
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Status", Name = "Status" });
+        }
+
         // ----------------------------------------------------------------
         // Inline button actions
         // ----------------------------------------------------------------
@@ -52,6 +140,7 @@ namespace WinFormsAppV3FlorenBooksV3
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
+            if (_showingBooks) return;
 
             var row = dataGridView1.Rows[e.RowIndex];
             int userId = Convert.ToInt32(row.Cells["colId"].Value);
@@ -245,7 +334,17 @@ namespace WinFormsAppV3FlorenBooksV3
 
         private void buttonExportCsv_Click(object sender, EventArgs e)
         {
-            CsvExportHelper.ExportDataGridView(dataGridView1, "utilizatori.csv");
+            CsvExportHelper.ExportDataGridView(dataGridView1, _showingBooks ? "carti_biblioteca.csv" : "utilizatori.csv");
+        }
+
+        private void buttonUsers_Click(object sender, EventArgs e)
+        {
+            LoadUsers();
+        }
+
+        private void buttonBooks_Click(object sender, EventArgs e)
+        {
+            LoadBooks();
         }
     }
 }
