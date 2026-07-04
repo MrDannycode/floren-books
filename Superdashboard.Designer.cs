@@ -35,6 +35,7 @@ namespace WinFormsAppV3FlorenBooksV3
             colEditEmail = new DataGridViewButtonColumn();
             colChangeRole = new DataGridViewButtonColumn();
             colDelete = new DataGridViewButtonColumn();
+            buttonExportCsv = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
@@ -45,11 +46,11 @@ namespace WinFormsAppV3FlorenBooksV3
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Columns.AddRange(new DataGridViewColumn[] { colId, Email, role, colEditEmail, colChangeRole, colDelete });
-            dataGridView1.Location = new Point(-1, 0);
+            dataGridView1.Location = new Point(12, 41);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.ReadOnly = true;
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView1.Size = new Size(800, 449);
+            dataGridView1.Size = new Size(776, 397);
             dataGridView1.TabIndex = 0;
             dataGridView1.CellContentClick += dataGridView1_CellContentClick;
             // 
@@ -101,11 +102,22 @@ namespace WinFormsAppV3FlorenBooksV3
             colDelete.Text = "Delete";
             colDelete.UseColumnTextForButtonValue = true;
             // 
+            // buttonExportCsv
+            // 
+            buttonExportCsv.Location = new Point(12, 12);
+            buttonExportCsv.Name = "buttonExportCsv";
+            buttonExportCsv.Size = new Size(90, 23);
+            buttonExportCsv.TabIndex = 1;
+            buttonExportCsv.Text = "Export CSV";
+            buttonExportCsv.UseVisualStyleBackColor = true;
+            buttonExportCsv.Click += buttonExportCsv_Click;
+            // 
             // Superdashboard
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(buttonExportCsv);
             Controls.Add(dataGridView1);
             Name = "Superdashboard";
             Text = "Superdashboard";
@@ -123,5 +135,6 @@ namespace WinFormsAppV3FlorenBooksV3
         private DataGridViewButtonColumn colEditEmail;
         private DataGridViewButtonColumn colChangeRole;
         private DataGridViewButtonColumn colDelete;
+        private Button buttonExportCsv;
     }
 }

@@ -81,5 +81,10 @@ namespace WinFormsAppV3FlorenBooksV3
                 MessageBox.Show($"Transaction failed: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void buttonExportCsv_Click(object sender, EventArgs e)
+        {
+            CsvExportHelper.ExportDataGridView(dataGridView1, "carti.csv");
+        }
     }
 }

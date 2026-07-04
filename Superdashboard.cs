@@ -242,5 +242,10 @@ namespace WinFormsAppV3FlorenBooksV3
         private void toolStripComboBox1_Click(object sender, EventArgs e) { }
         private void toolStripButton3_Click(object sender, EventArgs e) { }
         private void addToolStripMenuItem_Click(object sender, EventArgs e) { }
+
+        private void buttonExportCsv_Click(object sender, EventArgs e)
+        {
+            CsvExportHelper.ExportDataGridView(dataGridView1, "utilizatori.csv");
+        }
     }
 }

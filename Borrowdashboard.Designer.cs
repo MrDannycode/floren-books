@@ -27,6 +27,7 @@ namespace WinFormsAppV3FlorenBooksV3
             Status = new DataGridViewTextBoxColumn();
             colReturn = new DataGridViewButtonColumn();
             buttonRefresh = new Button();
+            buttonExportCsv = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
@@ -111,11 +112,22 @@ namespace WinFormsAppV3FlorenBooksV3
             buttonRefresh.UseVisualStyleBackColor = true;
             buttonRefresh.Click += buttonRefresh_Click;
             // 
+            // buttonExportCsv
+            // 
+            buttonExportCsv.Location = new Point(108, 12);
+            buttonExportCsv.Name = "buttonExportCsv";
+            buttonExportCsv.Size = new Size(90, 23);
+            buttonExportCsv.TabIndex = 2;
+            buttonExportCsv.Text = "Export CSV";
+            buttonExportCsv.UseVisualStyleBackColor = true;
+            buttonExportCsv.Click += buttonExportCsv_Click;
+            // 
             // Borrowdashboard
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(900, 450);
+            Controls.Add(buttonExportCsv);
             Controls.Add(buttonRefresh);
             Controls.Add(dataGridView1);
             Name = "Borrowdashboard";
@@ -137,5 +149,6 @@ namespace WinFormsAppV3FlorenBooksV3
         private DataGridViewTextBoxColumn Status;
         private DataGridViewButtonColumn colReturn;
         private Button buttonRefresh;
+        private Button buttonExportCsv;
     }
 }
