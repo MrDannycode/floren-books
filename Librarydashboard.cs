@@ -85,6 +85,7 @@ namespace WinFormsAppV3FlorenBooksV3
                 
                 // Clear fields after success
                 button2_Click(sender, e);
+                LoadBooks();
             }
             catch (Exception ex)
             {
@@ -100,6 +101,34 @@ namespace WinFormsAppV3FlorenBooksV3
             textBox3.Clear();
             textBox4.Clear();
             textBox5.Clear();
+        }
+
+        private void Librarydashboard_Load(object sender, EventArgs e)
+        {
+            LoadBooks();
+        }
+
+        private void LoadBooks()
+        {
+            try
+            {
+                var books = BookRepository.GetAllBooks();
+                dataGridViewBooks.Rows.Clear();
+
+                foreach (var book in books)
+                {
+                    dataGridViewBooks.Rows.Add(book.Id, book.Titlu, book.Autor, book.Editura, book.Anul, book.Pret, book.Status);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Eroare la incarcarea cartilor: {ex.Message}", "Eroare", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void buttonRefreshBooks_Click(object sender, EventArgs e)
+        {
+            LoadBooks();
         }
     }
 }
