@@ -142,7 +142,7 @@ namespace WinFormsAppV3FlorenBooksV3
                     string status = row.Cells["Status"].Value?.ToString() ?? "";
                     if (status == "Imprumutata")
                     {
-                        MessageBox.Show($"'{titlu}' este deja imprumutata.", "Indisponibila", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show($"'{titlu}' nu mai are exemplare disponibile.", "Indisponibila", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         return;
                     }
 

@@ -10,5 +10,6 @@ namespace WinFormsAppV3FlorenBooksV3.Models
         public decimal? Pret { get; set; }
         public string? CoverImagePath { get; set; }
         public string Status { get; set; } = "Disponibila";
+        public int Exemplare { get; set; } = 1;
     }
 }

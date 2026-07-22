@@ -23,6 +23,7 @@ namespace WinFormsAppV3FlorenBooksV3
                 );
 
                 ALTER TABLE books ADD COLUMN IF NOT EXISTS cover_image_path TEXT;
+                ALTER TABLE books ADD COLUMN IF NOT EXISTS exemplare INT NOT NULL DEFAULT 1;
 
                 CREATE TABLE IF NOT EXISTS purchased_books (
                     id SERIAL PRIMARY KEY,
@@ -46,8 +47,8 @@ namespace WinFormsAppV3FlorenBooksV3
         {
             using var connection = DatabaseHelper.GetConnection();
             var query = @"
-                INSERT INTO books (titlu, autor, editura, anul, pret, cover_image_path)
-                VALUES (@titlu, @autor, @editura, @anul, @pret, @coverImagePath)";
+                INSERT INTO books (titlu, autor, editura, anul, pret, cover_image_path, exemplare)
+                VALUES (@titlu, @autor, @editura, @anul, @pret, @coverImagePath, @exemplare)";
 
             using var command = new NpgsqlCommand(query, connection);
             command.Parameters.AddWithValue("titlu", book.Titlu);
@@ -56,7 +57,19 @@ namespace WinFormsAppV3FlorenBooksV3
             command.Parameters.AddWithValue("anul", book.Anul.HasValue ? book.Anul.Value : DBNull.Value);
             command.Parameters.AddWithValue("pret", book.Pret.HasValue ? book.Pret.Value : DBNull.Value);
             command.Parameters.AddWithValue("coverImagePath", string.IsNullOrWhiteSpace(book.CoverImagePath) ? DBNull.Value : book.CoverImagePath);
+            command.Parameters.AddWithValue("exemplare", book.Exemplare > 0 ? book.Exemplare : 1);
 
+            command.ExecuteNonQuery();
+        }
+
+        public static void SetBookExemplare(int bookId, int exemplare)
+        {
+            if (exemplare < 1) throw new ArgumentException("Numărul de exemplare trebuie să fie cel puțin 1.");
+            using var connection = DatabaseHelper.GetConnection();
+            var query = "UPDATE books SET exemplare = @exemplare WHERE id = @bookId";
+            using var command = new NpgsqlCommand(query, connection);
+            command.Parameters.AddWithValue("exemplare", exemplare);
+            command.Parameters.AddWithValue("bookId", bookId);
             command.ExecuteNonQuery();
         }
         public static List<Book> GetAllBooks()
@@ -72,15 +85,12 @@ namespace WinFormsAppV3FlorenBooksV3
                     b.anul,
                     b.pret,
                     b.cover_image_path,
-                    CASE
-                        WHEN EXISTS (
-                            SELECT 1
-                            FROM borrowed_books bb
-                            WHERE bb.book_id = b.id AND bb.return_date IS NULL
-                        )
-                        THEN 'Imprumutata'
-                        ELSE 'Disponibila'
-                    END AS status
+                    b.exemplare,
+                    (
+                        SELECT COUNT(*)
+                        FROM borrowed_books bb
+                        WHERE bb.book_id = b.id AND bb.return_date IS NULL
+                    ) AS active_borrows
                 FROM books b
                 ORDER BY b.id";
             using var command = new NpgsqlCommand(query, connection);
@@ -88,6 +98,12 @@ namespace WinFormsAppV3FlorenBooksV3
 
             while (reader.Read())
             {
+                int exemplare = reader.GetInt32(7);
+                long activeBorrows = reader.GetInt64(8);
+                string status = activeBorrows >= exemplare
+                    ? "Imprumutata"
+                    : $"Disponibila ({exemplare - activeBorrows}/{exemplare})";
+
                 var book = new Book
                 {
                     Id = reader.GetInt32(0),
@@ -97,7 +113,8 @@ namespace WinFormsAppV3FlorenBooksV3
                     Anul = reader.IsDBNull(4) ? (int?)null : reader.GetInt32(4),
                     Pret = reader.IsDBNull(5) ? (decimal?)null : reader.GetDecimal(5),
                     CoverImagePath = reader.IsDBNull(6) ? null : reader.GetString(6),
-                    Status = reader.GetString(7)
+                    Exemplare = exemplare,
+                    Status = status
                 };
                 books.Add(book);
             }
@@ -118,6 +135,7 @@ namespace WinFormsAppV3FlorenBooksV3
                     b.anul,
                     b.pret,
                     b.cover_image_path,
+                    b.exemplare,
                     CASE
                         WHEN EXISTS (
                             SELECT 1
@@ -159,7 +177,8 @@ namespace WinFormsAppV3FlorenBooksV3
                     Anul = reader.IsDBNull(4) ? (int?)null : reader.GetInt32(4),
                     Pret = reader.IsDBNull(5) ? (decimal?)null : reader.GetDecimal(5),
                     CoverImagePath = reader.IsDBNull(6) ? null : reader.GetString(6),
-                    Status = reader.GetString(7)
+                    Exemplare = reader.GetInt32(7),
+                    Status = reader.GetString(8)
                 });
             }
 
@@ -199,7 +218,7 @@ namespace WinFormsAppV3FlorenBooksV3
             var borrowedBooks = new List<BorrowedBook>();
             using var connection = DatabaseHelper.GetConnection();
             var query = @"
-                SELECT bb.id, u.email, b.titlu, b.autor, bb.borrow_date, bb.return_date
+                SELECT bb.id, bb.book_id, u.email, b.titlu, b.autor, bb.borrow_date, bb.return_date
                 FROM borrowed_books bb
                 INNER JOIN users u ON u.id = bb.user_id
                 INNER JOIN books b ON b.id = bb.book_id
@@ -213,11 +232,12 @@ namespace WinFormsAppV3FlorenBooksV3
                 borrowedBooks.Add(new BorrowedBook
                 {
                     Id = reader.GetInt32(0),
-                    UserEmail = reader.GetString(1),
-                    BookTitle = reader.GetString(2),
-                    BookAuthor = reader.GetString(3),
-                    BorrowDate = reader.GetDateTime(4),
-                    ReturnDate = reader.IsDBNull(5) ? null : reader.GetDateTime(5)
+                    BookId = reader.GetInt32(1),
+                    UserEmail = reader.GetString(2),
+                    BookTitle = reader.GetString(3),
+                    BookAuthor = reader.GetString(4),
+                    BorrowDate = reader.GetDateTime(5),
+                    ReturnDate = reader.IsDBNull(6) ? null : reader.GetDateTime(6)
                 });
             }
 

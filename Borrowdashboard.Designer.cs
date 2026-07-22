@@ -19,6 +19,7 @@ namespace WinFormsAppV3FlorenBooksV3
         {
             dataGridView1 = new DataGridView();
             colId = new DataGridViewTextBoxColumn();
+            colBookId = new DataGridViewTextBoxColumn();
             UserEmail = new DataGridViewTextBoxColumn();
             BookTitle = new DataGridViewTextBoxColumn();
             BookAuthor = new DataGridViewTextBoxColumn();
@@ -28,6 +29,7 @@ namespace WinFormsAppV3FlorenBooksV3
             colReturn = new DataGridViewButtonColumn();
             buttonRefresh = new Button();
             buttonExportCsv = new Button();
+            buttonSetExemplare = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
@@ -37,7 +39,7 @@ namespace WinFormsAppV3FlorenBooksV3
             dataGridView1.AllowUserToDeleteRows = false;
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { colId, UserEmail, BookTitle, BookAuthor, BorrowDate, ReturnDate, Status, colReturn });
+            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { colId, colBookId, UserEmail, BookTitle, BookAuthor, BorrowDate, ReturnDate, Status, colReturn });
             dataGridView1.Location = new Point(0, 41);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.ReadOnly = true;
@@ -52,6 +54,13 @@ namespace WinFormsAppV3FlorenBooksV3
             colId.Name = "colId";
             colId.ReadOnly = true;
             colId.Visible = false;
+            // 
+            // colBookId
+            // 
+            colBookId.HeaderText = "BookId";
+            colBookId.Name = "colBookId";
+            colBookId.ReadOnly = true;
+            colBookId.Visible = false;
             // 
             // UserEmail
             // 
@@ -123,6 +132,16 @@ namespace WinFormsAppV3FlorenBooksV3
             buttonExportCsv.UseVisualStyleBackColor = true;
             buttonExportCsv.Click += buttonExportCsv_Click;
             // 
+            // buttonSetExemplare
+            // 
+            buttonSetExemplare.Location = new Point(116, 12);
+            buttonSetExemplare.Name = "buttonSetExemplare";
+            buttonSetExemplare.Size = new Size(140, 23);
+            buttonSetExemplare.TabIndex = 3;
+            buttonSetExemplare.Text = "Setează Exemplare";
+            buttonSetExemplare.UseVisualStyleBackColor = true;
+            buttonSetExemplare.Click += buttonSetExemplare_Click;
+            // 
             // Borrowdashboard
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -130,6 +149,7 @@ namespace WinFormsAppV3FlorenBooksV3
             ClientSize = new Size(900, 450);
             Controls.Add(buttonExportCsv);
             Controls.Add(buttonRefresh);
+            Controls.Add(buttonSetExemplare);
             Controls.Add(dataGridView1);
             Name = "Borrowdashboard";
             Text = "Borrowdashboard";
@@ -142,6 +162,7 @@ namespace WinFormsAppV3FlorenBooksV3
 
         private DataGridView dataGridView1;
         private DataGridViewTextBoxColumn colId;
+        private DataGridViewTextBoxColumn colBookId;
         private DataGridViewTextBoxColumn UserEmail;
         private DataGridViewTextBoxColumn BookTitle;
         private DataGridViewTextBoxColumn BookAuthor;
@@ -151,5 +172,6 @@ namespace WinFormsAppV3FlorenBooksV3
         private DataGridViewButtonColumn colReturn;
         private Button buttonRefresh;
         private Button buttonExportCsv;
+        private Button buttonSetExemplare;
     }
 }
