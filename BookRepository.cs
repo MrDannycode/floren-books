@@ -18,8 +18,11 @@ namespace WinFormsAppV3FlorenBooksV3
                     editura VARCHAR(255),
                     anul INT,
                     pret DECIMAL(10, 2),
+                    cover_image_path TEXT,
                     created_at TIMESTAMP DEFAULT NOW()
                 );
+
+                ALTER TABLE books ADD COLUMN IF NOT EXISTS cover_image_path TEXT;
 
                 CREATE TABLE IF NOT EXISTS purchased_books (
                     id SERIAL PRIMARY KEY,
@@ -43,8 +46,8 @@ namespace WinFormsAppV3FlorenBooksV3
         {
             using var connection = DatabaseHelper.GetConnection();
             var query = @"
-                INSERT INTO books (titlu, autor, editura, anul, pret)
-                VALUES (@titlu, @autor, @editura, @anul, @pret)";
+                INSERT INTO books (titlu, autor, editura, anul, pret, cover_image_path)
+                VALUES (@titlu, @autor, @editura, @anul, @pret, @coverImagePath)";
 
             using var command = new NpgsqlCommand(query, connection);
             command.Parameters.AddWithValue("titlu", book.Titlu);
@@ -52,6 +55,7 @@ namespace WinFormsAppV3FlorenBooksV3
             command.Parameters.AddWithValue("editura", string.IsNullOrEmpty(book.Editura) ? DBNull.Value : book.Editura);
             command.Parameters.AddWithValue("anul", book.Anul.HasValue ? book.Anul.Value : DBNull.Value);
             command.Parameters.AddWithValue("pret", book.Pret.HasValue ? book.Pret.Value : DBNull.Value);
+            command.Parameters.AddWithValue("coverImagePath", string.IsNullOrWhiteSpace(book.CoverImagePath) ? DBNull.Value : book.CoverImagePath);
 
             command.ExecuteNonQuery();
         }
@@ -67,6 +71,7 @@ namespace WinFormsAppV3FlorenBooksV3
                     b.editura,
                     b.anul,
                     b.pret,
+                    b.cover_image_path,
                     CASE
                         WHEN EXISTS (
                             SELECT 1
@@ -91,7 +96,8 @@ namespace WinFormsAppV3FlorenBooksV3
                     Editura = reader.IsDBNull(3) ? null : reader.GetString(3),
                     Anul = reader.IsDBNull(4) ? (int?)null : reader.GetInt32(4),
                     Pret = reader.IsDBNull(5) ? (decimal?)null : reader.GetDecimal(5),
-                    Status = reader.GetString(6)
+                    CoverImagePath = reader.IsDBNull(6) ? null : reader.GetString(6),
+                    Status = reader.GetString(7)
                 };
                 books.Add(book);
             }
@@ -111,6 +117,7 @@ namespace WinFormsAppV3FlorenBooksV3
                     b.editura,
                     b.anul,
                     b.pret,
+                    b.cover_image_path,
                     CASE
                         WHEN EXISTS (
                             SELECT 1
@@ -151,7 +158,8 @@ namespace WinFormsAppV3FlorenBooksV3
                     Editura = reader.IsDBNull(3) ? null : reader.GetString(3),
                     Anul = reader.IsDBNull(4) ? (int?)null : reader.GetInt32(4),
                     Pret = reader.IsDBNull(5) ? (decimal?)null : reader.GetDecimal(5),
-                    Status = reader.GetString(6)
+                    CoverImagePath = reader.IsDBNull(6) ? null : reader.GetString(6),
+                    Status = reader.GetString(7)
                 });
             }
 

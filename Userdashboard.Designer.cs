@@ -29,6 +29,7 @@ namespace WinFormsAppV3FlorenBooksV3
         private void InitializeComponent()
         {
             dataGridView1 = new DataGridView();
+            Coperta = new DataGridViewImageColumn();
             colId = new DataGridViewTextBoxColumn();
             Titlu = new DataGridViewTextBoxColumn();
             Autor = new DataGridViewTextBoxColumn();
@@ -50,14 +51,23 @@ namespace WinFormsAppV3FlorenBooksV3
             dataGridView1.AllowUserToDeleteRows = false;
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { colId, Titlu, Autor, Editura, Anul, Pret, Status, colBuy, colBorrow });
+            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { Coperta, colId, Titlu, Autor, Editura, Anul, Pret, Status, colBuy, colBorrow });
             dataGridView1.Location = new Point(12, 41);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.ReadOnly = true;
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridView1.Size = new Size(776, 397);
             dataGridView1.TabIndex = 0;
+            dataGridView1.RowTemplate.Height = 60;
             dataGridView1.CellContentClick += dataGridView1_CellContentClick;
+            //
+            // Coperta
+            //
+            Coperta.HeaderText = "Coperta";
+            Coperta.ImageLayout = DataGridViewImageCellLayout.Zoom;
+            Coperta.Name = "Coperta";
+            Coperta.ReadOnly = true;
+            Coperta.Width = 70;
             // 
             // colId
             // 
@@ -167,6 +177,7 @@ namespace WinFormsAppV3FlorenBooksV3
         #endregion
 
         private DataGridView dataGridView1;
+        private DataGridViewImageColumn Coperta;
         private DataGridViewTextBoxColumn colId;
         private DataGridViewTextBoxColumn Titlu;
         private DataGridViewTextBoxColumn Autor;

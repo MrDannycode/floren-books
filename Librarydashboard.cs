@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,8 @@ namespace WinFormsAppV3FlorenBooksV3
 
     public partial class Librarydashboard : Form
     {
+        private string? selectedCoverPath;
+
         public Librarydashboard()
         {
             InitializeComponent();
@@ -80,6 +83,11 @@ namespace WinFormsAppV3FlorenBooksV3
                     book.Pret = pret;
                 }
 
+                if (!string.IsNullOrWhiteSpace(selectedCoverPath))
+                {
+                    book.CoverImagePath = BookCoverStorage.SaveCover(selectedCoverPath);
+                }
+
                 BookRepository.AddBook(book);
                 MessageBox.Show("Cartea a fost adaugata cu succes!", "Succes", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 
@@ -101,6 +109,9 @@ namespace WinFormsAppV3FlorenBooksV3
             textBox3.Clear();
             textBox4.Clear();
             textBox5.Clear();
+            selectedCoverPath = null;
+            pictureBoxCover.Image?.Dispose();
+            pictureBoxCover.Image = null;
         }
 
         private void Librarydashboard_Load(object sender, EventArgs e)
@@ -117,7 +128,15 @@ namespace WinFormsAppV3FlorenBooksV3
 
                 foreach (var book in books)
                 {
-                    dataGridViewBooks.Rows.Add(book.Id, book.Titlu, book.Autor, book.Editura, book.Anul, book.Pret, book.Status);
+                    dataGridViewBooks.Rows.Add(
+                        LoadCoverThumbnail(book.CoverImagePath),
+                        book.Id,
+                        book.Titlu,
+                        book.Autor,
+                        book.Editura,
+                        book.Anul,
+                        book.Pret,
+                        book.Status);
                 }
             }
             catch (Exception ex)
@@ -129,6 +148,50 @@ namespace WinFormsAppV3FlorenBooksV3
         private void buttonRefreshBooks_Click(object sender, EventArgs e)
         {
             LoadBooks();
+        }
+
+        private void buttonChooseCover_Click(object sender, EventArgs e)
+        {
+            using var dialog = new OpenFileDialog
+            {
+                Title = "Alege coperta cartii",
+                Filter = "Imagini|*.jpg;*.jpeg;*.png;*.bmp|Toate fisierele|*.*"
+            };
+
+            if (dialog.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+
+            try
+            {
+                using var image = Image.FromFile(dialog.FileName);
+                pictureBoxCover.Image?.Dispose();
+                pictureBoxCover.Image = new Bitmap(image);
+                selectedCoverPath = dialog.FileName;
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Fisierul selectat nu este o imagine valida.", "Imagine invalida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private static Image? LoadCoverThumbnail(string? path)
+        {
+            if (string.IsNullOrWhiteSpace(path) || !File.Exists(path))
+            {
+                return null;
+            }
+
+            try
+            {
+                using var image = Image.FromFile(path);
+                return new Bitmap(image, new Size(40, 55));
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
     }
 }

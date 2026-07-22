@@ -42,7 +42,10 @@
             button1 = new Button();
             button2 = new Button();
             buttonRefreshBooks = new Button();
+            buttonChooseCover = new Button();
+            pictureBoxCover = new PictureBox();
             dataGridViewBooks = new DataGridView();
+            Coperta = new DataGridViewImageColumn();
             colId = new DataGridViewTextBoxColumn();
             Titlu = new DataGridViewTextBoxColumn();
             Autor = new DataGridViewTextBoxColumn();
@@ -51,6 +54,7 @@
             Pret = new DataGridViewTextBoxColumn();
             Status = new DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)dataGridViewBooks).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBoxCover).BeginInit();
             SuspendLayout();
             // 
             // label1
@@ -149,7 +153,7 @@
             // 
             // button1
             // 
-            button1.Location = new Point(86, 295);
+            button1.Location = new Point(86, 305);
             button1.Name = "button1";
             button1.Size = new Size(75, 23);
             button1.TabIndex = 2;
@@ -159,7 +163,7 @@
             // 
             // button2
             // 
-            button2.Location = new Point(191, 295);
+            button2.Location = new Point(191, 305);
             button2.Name = "button2";
             button2.Size = new Size(75, 23);
             button2.TabIndex = 2;
@@ -176,6 +180,26 @@
             buttonRefreshBooks.Text = "Refresh";
             buttonRefreshBooks.UseVisualStyleBackColor = true;
             buttonRefreshBooks.Click += buttonRefreshBooks_Click;
+            //
+            // buttonChooseCover
+            //
+            buttonChooseCover.Location = new Point(72, 267);
+            buttonChooseCover.Name = "buttonChooseCover";
+            buttonChooseCover.Size = new Size(170, 23);
+            buttonChooseCover.TabIndex = 3;
+            buttonChooseCover.Text = "Alege coperta...";
+            buttonChooseCover.UseVisualStyleBackColor = true;
+            buttonChooseCover.Click += buttonChooseCover_Click;
+            //
+            // pictureBoxCover
+            //
+            pictureBoxCover.BorderStyle = BorderStyle.FixedSingle;
+            pictureBoxCover.Location = new Point(260, 92);
+            pictureBoxCover.Name = "pictureBoxCover";
+            pictureBoxCover.Size = new Size(58, 92);
+            pictureBoxCover.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBoxCover.TabIndex = 5;
+            pictureBoxCover.TabStop = false;
             // 
             // dataGridViewBooks
             // 
@@ -184,13 +208,22 @@
             dataGridViewBooks.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dataGridViewBooks.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridViewBooks.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewBooks.Columns.AddRange(new DataGridViewColumn[] { colId, Titlu, Autor, Editura, Anul, Pret, Status });
+            dataGridViewBooks.Columns.AddRange(new DataGridViewColumn[] { Coperta, colId, Titlu, Autor, Editura, Anul, Pret, Status });
             dataGridViewBooks.Location = new Point(334, 41);
             dataGridViewBooks.Name = "dataGridViewBooks";
             dataGridViewBooks.ReadOnly = true;
             dataGridViewBooks.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridViewBooks.Size = new Size(554, 290);
             dataGridViewBooks.TabIndex = 4;
+            dataGridViewBooks.RowTemplate.Height = 60;
+            //
+            // Coperta
+            //
+            Coperta.HeaderText = "Coperta";
+            Coperta.ImageLayout = DataGridViewImageCellLayout.Zoom;
+            Coperta.Name = "Coperta";
+            Coperta.ReadOnly = true;
+            Coperta.Width = 70;
             // 
             // colId
             // 
@@ -241,6 +274,8 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(900, 343);
             Controls.Add(dataGridViewBooks);
+            Controls.Add(pictureBoxCover);
+            Controls.Add(buttonChooseCover);
             Controls.Add(buttonRefreshBooks);
             Controls.Add(button2);
             Controls.Add(button1);
@@ -259,6 +294,7 @@
             Text = "Librarydashboard";
             Load += Librarydashboard_Load;
             ((System.ComponentModel.ISupportInitialize)dataGridViewBooks).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBoxCover).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -279,7 +315,10 @@
         private Button button1;
         private Button button2;
         private Button buttonRefreshBooks;
+        private Button buttonChooseCover;
+        private PictureBox pictureBoxCover;
         private DataGridView dataGridViewBooks;
+        private DataGridViewImageColumn Coperta;
         private DataGridViewTextBoxColumn colId;
         private DataGridViewTextBoxColumn Titlu;
         private DataGridViewTextBoxColumn Autor;
