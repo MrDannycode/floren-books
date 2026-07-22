@@ -8,6 +8,7 @@ namespace WinFormsAppV3FlorenBooksV3
     /// </summary>
     public static class UserRepository
     {
+        public enum AccountUpdateResult { Success, InvalidCurrentPassword, EmailAlreadyInUse, UserNotFound }
         // ----------------------------------------------------------------
         // Seeding
         // ----------------------------------------------------------------
@@ -178,6 +179,36 @@ namespace WinFormsAppV3FlorenBooksV3
             cmd.Parameters.AddWithValue("newEmail", newEmail);
             cmd.Parameters.AddWithValue("userId", userId);
             cmd.ExecuteNonQuery();
+        }
+
+        public static AccountUpdateResult UpdateOwnAccount(int userId, string currentPassword, string newEmail, string? newPassword)
+        {
+            using var conn = DatabaseHelper.GetConnection();
+            using var transaction = conn.BeginTransaction();
+            string? storedPassword;
+            using (var passwordCmd = new NpgsqlCommand("SELECT password FROM users WHERE id = @userId FOR UPDATE", conn, transaction))
+            {
+                passwordCmd.Parameters.AddWithValue("userId", userId);
+                storedPassword = passwordCmd.ExecuteScalar() as string;
+            }
+
+            if (storedPassword == null) return AccountUpdateResult.UserNotFound;
+            if (!VerifyPassword(currentPassword, storedPassword)) return AccountUpdateResult.InvalidCurrentPassword;
+
+            using (var emailCheckCmd = new NpgsqlCommand("SELECT COUNT(*) FROM users WHERE email = @email AND id <> @userId", conn, transaction))
+            {
+                emailCheckCmd.Parameters.AddWithValue("email", newEmail);
+                emailCheckCmd.Parameters.AddWithValue("userId", userId);
+                if ((long)(emailCheckCmd.ExecuteScalar() ?? 0) > 0) return AccountUpdateResult.EmailAlreadyInUse;
+            }
+
+            using var updateCmd = new NpgsqlCommand("UPDATE users SET email = @email, password = @password WHERE id = @userId", conn, transaction);
+            updateCmd.Parameters.AddWithValue("email", newEmail);
+            updateCmd.Parameters.AddWithValue("password", string.IsNullOrEmpty(newPassword) ? storedPassword : BCrypt.Net.BCrypt.HashPassword(newPassword));
+            updateCmd.Parameters.AddWithValue("userId", userId);
+            updateCmd.ExecuteNonQuery();
+            transaction.Commit();
+            return AccountUpdateResult.Success;
         }
 
         /// <summary>

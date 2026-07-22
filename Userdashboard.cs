@@ -21,14 +21,17 @@ namespace WinFormsAppV3FlorenBooksV3
         {
             InitializeComponent();
             _currentUser = currentUser;
+            AccountSettingsButton.AddTo(this, _currentUser, RefreshDashboardTitle);
             this.Load += Userdashboard_Load;
         }
 
         private void Userdashboard_Load(object sender, EventArgs e)
         {
-            this.Text = $"User Dashboard — {_currentUser.Email}";
+            RefreshDashboardTitle();
             LoadBooks();
         }
+
+        private void RefreshDashboardTitle() => Text = $"User Dashboard — {_currentUser.Email}";
 
         private void LoadBooks()
         {

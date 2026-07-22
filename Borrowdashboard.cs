@@ -12,13 +12,16 @@ namespace WinFormsAppV3FlorenBooksV3
         {
             InitializeComponent();
             _currentUser = currentUser;
+            AccountSettingsButton.AddTo(this, _currentUser, RefreshDashboardTitle);
         }
 
         private void Borrowdashboard_Load(object sender, EventArgs e)
         {
-            Text = $"Borrow Dashboard - {_currentUser.Email} [{_currentUser.Role}]";
+            RefreshDashboardTitle();
             LoadBorrowedBooks();
         }
+
+        private void RefreshDashboardTitle() => Text = $"Borrow Dashboard - {_currentUser.Email} [{_currentUser.Role}]";
 
         private void LoadBorrowedBooks()
         {

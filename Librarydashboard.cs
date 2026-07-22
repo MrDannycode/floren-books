@@ -15,11 +15,14 @@ namespace WinFormsAppV3FlorenBooksV3
 
     public partial class Librarydashboard : Form
     {
+        private readonly User _currentUser;
         private string? selectedCoverPath;
 
-        public Librarydashboard()
+        public Librarydashboard(User currentUser)
         {
             InitializeComponent();
+            _currentUser = currentUser;
+            AccountSettingsButton.AddTo(this, _currentUser, RefreshDashboardTitle);
             try
             {
                 BookRepository.InitializeDatabase();
@@ -116,8 +119,11 @@ namespace WinFormsAppV3FlorenBooksV3
 
         private void Librarydashboard_Load(object sender, EventArgs e)
         {
+            RefreshDashboardTitle();
             LoadBooks();
         }
+
+        private void RefreshDashboardTitle() => Text = $"Library Dashboard - {_currentUser.Email} [{_currentUser.Role}]";
 
         private void LoadBooks()
         {

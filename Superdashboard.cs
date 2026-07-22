@@ -17,13 +17,16 @@ namespace WinFormsAppV3FlorenBooksV3
         {
             InitializeComponent();
             _currentUser = currentUser;
+            AccountSettingsButton.AddTo(this, _currentUser, RefreshDashboardTitle);
         }
 
         private void Superdashboard_Load(object sender, EventArgs e)
         {
-            this.Text = $"Super Dashboard  —  {_currentUser.Email}  [{_currentUser.Role}]";
+            RefreshDashboardTitle();
             LoadUsers();
         }
+
+        private void RefreshDashboardTitle() => Text = $"Super Dashboard  —  {_currentUser.Email}  [{_currentUser.Role}]";
 
         // ----------------------------------------------------------------
         // Grid population

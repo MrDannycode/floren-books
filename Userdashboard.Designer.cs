@@ -131,7 +131,7 @@ namespace WinFormsAppV3FlorenBooksV3
             // buttonExportCsv
             // 
             buttonExportCsv.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            buttonExportCsv.Location = new Point(698, 12);
+            buttonExportCsv.Location = new Point(495, 12);
             buttonExportCsv.Name = "buttonExportCsv";
             buttonExportCsv.Size = new Size(90, 23);
             buttonExportCsv.TabIndex = 1;
