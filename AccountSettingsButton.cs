@@ -35,7 +35,9 @@ public static class AccountSettingsButton
     private static void PlaceButtons(Form dashboard, Button settingsButton, Button logoutButton)
     {
         // Use an existing designer button as size reference so DPI scaling is respected
-        var reference = dashboard.Controls.OfType<Button>().FirstOrDefault(b => b.Top < 50);
+        // Exclude the buttons we just added (they have Top=0 before placement)
+        var reference = dashboard.Controls.OfType<Button>()
+            .FirstOrDefault(b => b != settingsButton && b != logoutButton && b.Top >= 5);
 
         int y = reference?.Top ?? 12;
         int h = reference?.Height ?? 23;
