@@ -38,7 +38,9 @@ namespace WinFormsAppV3FlorenBooksV3
             Editura = new DataGridViewTextBoxColumn();
             Anul = new DataGridViewTextBoxColumn();
             Pret = new DataGridViewTextBoxColumn();
+            Stoc = new DataGridViewTextBoxColumn();
             Status = new DataGridViewTextBoxColumn();
+            buttonSetStocVanzare = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridViewBooks).BeginInit();
             SuspendLayout();
             //
@@ -62,6 +64,16 @@ namespace WinFormsAppV3FlorenBooksV3
             buttonRefreshBooks.UseVisualStyleBackColor = true;
             buttonRefreshBooks.Click += buttonRefreshBooks_Click;
             //
+            // buttonSetStocVanzare
+            //
+            buttonSetStocVanzare.Location = new Point(219, 12);
+            buttonSetStocVanzare.Name = "buttonSetStocVanzare";
+            buttonSetStocVanzare.Size = new Size(130, 23);
+            buttonSetStocVanzare.TabIndex = 7;
+            buttonSetStocVanzare.Text = "Setează Stoc Vânzare";
+            buttonSetStocVanzare.UseVisualStyleBackColor = true;
+            buttonSetStocVanzare.Click += buttonSetStocVanzare_Click;
+            //
             // dataGridViewBooks
             //
             dataGridViewBooks.AllowUserToAddRows = false;
@@ -69,7 +81,7 @@ namespace WinFormsAppV3FlorenBooksV3
             dataGridViewBooks.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dataGridViewBooks.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridViewBooks.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewBooks.Columns.AddRange(new DataGridViewColumn[] { Coperta, colId, Titlu, Autor, Editura, Anul, Pret, Status });
+            dataGridViewBooks.Columns.AddRange(new DataGridViewColumn[] { Coperta, colId, Titlu, Autor, Editura, Anul, Pret, Stoc, Status });
             dataGridViewBooks.Location = new Point(12, 41);
             dataGridViewBooks.Name = "dataGridViewBooks";
             dataGridViewBooks.ReadOnly = true;
@@ -123,6 +135,12 @@ namespace WinFormsAppV3FlorenBooksV3
             Pret.Name = "Pret";
             Pret.ReadOnly = true;
             //
+            // Stoc
+            //
+            Stoc.HeaderText = "Stoc";
+            Stoc.Name = "Stoc";
+            Stoc.ReadOnly = true;
+            //
             // Status
             //
             Status.HeaderText = "Status";
@@ -137,6 +155,7 @@ namespace WinFormsAppV3FlorenBooksV3
             Controls.Add(dataGridViewBooks);
             Controls.Add(buttonAdaugaCarte);
             Controls.Add(buttonRefreshBooks);
+            Controls.Add(buttonSetStocVanzare);
             Name = "Librarydashboard";
             Text = "Librarydashboard";
             Load += Librarydashboard_Load;
@@ -156,6 +175,8 @@ namespace WinFormsAppV3FlorenBooksV3
         private DataGridViewTextBoxColumn Editura;
         private DataGridViewTextBoxColumn Anul;
         private DataGridViewTextBoxColumn Pret;
+        private DataGridViewTextBoxColumn Stoc;
         private DataGridViewTextBoxColumn Status;
+        private Button buttonSetStocVanzare;
     }
 }

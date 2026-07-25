@@ -57,6 +57,7 @@ namespace WinFormsAppV3FlorenBooksV3
                         book.Editura,
                         book.Anul,
                         book.Pret,
+                        $"{book.StocRamas} / {book.StocVanzare}",
                         book.Status);
                 }
             }
@@ -72,6 +73,93 @@ namespace WinFormsAppV3FlorenBooksV3
             if (adaugaForm.ShowDialog() == DialogResult.OK)
             {
                 LoadBooks();
+            }
+        }
+
+        private void buttonSetStocVanzare_Click(object sender, EventArgs e)
+        {
+            if (dataGridViewBooks.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Selectează o carte din tabel.", "Nicio selecție", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            var row = dataGridViewBooks.SelectedRows[0];
+            int bookId = Convert.ToInt32(row.Cells["colId"].Value);
+            string bookTitle = row.Cells["Titlu"].Value?.ToString() ?? "carte";
+
+            using var inputForm = new Form
+            {
+                Text = "Setează Stoc Vânzare",
+                StartPosition = FormStartPosition.CenterParent,
+                ClientSize = new Size(340, 130),
+                FormBorderStyle = FormBorderStyle.FixedDialog,
+                MaximizeBox = false,
+                MinimizeBox = false
+            };
+
+            var label = new Label
+            {
+                Text = $"Număr cărți (stoc) disponibile pentru vânzare:\n\"{bookTitle}\":",
+                Location = new Point(12, 12),
+                Size = new Size(316, 40),
+                AutoSize = false
+            };
+
+            var numericUpDown = new NumericUpDown
+            {
+                Location = new Point(12, 58),
+                Size = new Size(80, 23),
+                Minimum = 0,
+                Maximum = 9999,
+                Value = 10 // Default logic
+            };
+            
+            // Try parse existing stock string if any
+            string stocStr = row.Cells["Stoc"].Value?.ToString() ?? "";
+            if (stocStr.Contains("/")) {
+                string totalStr = stocStr.Split('/')[1].Trim();
+                if (int.TryParse(totalStr, out int currentTotal)) {
+                    numericUpDown.Value = currentTotal;
+                }
+            }
+
+            var btnOk = new Button
+            {
+                Text = "OK",
+                Location = new Point(148, 56),
+                Size = new Size(80, 27),
+                DialogResult = DialogResult.OK
+            };
+
+            var btnCancel = new Button
+            {
+                Text = "Anulează",
+                Location = new Point(240, 56),
+                Size = new Size(80, 27),
+                DialogResult = DialogResult.Cancel
+            };
+
+            inputForm.Controls.AddRange(new Control[] { label, numericUpDown, btnOk, btnCancel });
+            inputForm.AcceptButton = btnOk;
+            inputForm.CancelButton = btnCancel;
+
+            if (inputForm.ShowDialog(this) != DialogResult.OK) return;
+
+            int stocVanzare = (int)numericUpDown.Value;
+
+            try
+            {
+                BookRepository.SetBookStocVanzare(bookId, stocVanzare);
+                MessageBox.Show(
+                    $"Stocul pentru \"{bookTitle}\" a fost setat la {stocVanzare}.",
+                    "Actualizat", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LoadBooks();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Eroare la actualizare:\n{ex.Message}",
+                    "Eroare", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

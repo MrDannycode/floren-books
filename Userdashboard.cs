@@ -77,6 +77,7 @@ namespace WinFormsAppV3FlorenBooksV3
                     book.Editura,
                     book.Anul,
                     book.Pret,
+                    $"{book.StocRamas} / {book.StocVanzare}",
                     book.Status);
                 dataGridView1.Rows[rowIndex].Tag = book.CoverImagePath;
             }
@@ -126,6 +127,16 @@ namespace WinFormsAppV3FlorenBooksV3
             {
                 if (colName == "colBuy")
                 {
+                    // Find the book to check stock before buying
+                    var allBooks = _showingMyBooks ? BookRepository.GetBooksForUser(_currentUser.Id) : BookRepository.GetAllBooks();
+                    var selectedBook = allBooks.FirstOrDefault(b => b.Id == bookId);
+                    
+                    if (selectedBook != null && selectedBook.StocRamas <= 0)
+                    {
+                        MessageBox.Show($"'{titlu}' este indisponibila (stoc epuizat).", "Stoc epuizat", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
                     var confirm = MessageBox.Show($"Are you sure you want to buy '{titlu}'?", "Confirm Purchase", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     if (confirm == DialogResult.Yes)
                     {
@@ -134,6 +145,10 @@ namespace WinFormsAppV3FlorenBooksV3
                         if (_showingMyBooks)
                         {
                             LoadMyBooks();
+                        }
+                        else
+                        {
+                            LoadBooks();
                         }
                     }
                 }

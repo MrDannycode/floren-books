@@ -36,6 +36,7 @@ namespace WinFormsAppV3FlorenBooksV3
             Editura = new DataGridViewTextBoxColumn();
             Anul = new DataGridViewTextBoxColumn();
             Pret = new DataGridViewTextBoxColumn();
+            Stoc = new DataGridViewTextBoxColumn();
             Status = new DataGridViewTextBoxColumn();
             colBuy = new DataGridViewButtonColumn();
             colBorrow = new DataGridViewButtonColumn();
@@ -51,7 +52,7 @@ namespace WinFormsAppV3FlorenBooksV3
             dataGridView1.AllowUserToDeleteRows = false;
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { Coperta, colId, Titlu, Autor, Editura, Anul, Pret, Status, colBuy, colBorrow });
+            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { Coperta, colId, Titlu, Autor, Editura, Anul, Pret, Stoc, Status, colBuy, colBorrow });
             dataGridView1.Location = new Point(12, 41);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.ReadOnly = true;
@@ -105,6 +106,12 @@ namespace WinFormsAppV3FlorenBooksV3
             Pret.HeaderText = "Pret";
             Pret.Name = "Pret";
             Pret.ReadOnly = true;
+            // 
+            // Stoc
+            // 
+            Stoc.HeaderText = "Stoc";
+            Stoc.Name = "Stoc";
+            Stoc.ReadOnly = true;
             // 
             // Status
             // 
@@ -184,6 +191,7 @@ namespace WinFormsAppV3FlorenBooksV3
         private DataGridViewTextBoxColumn Editura;
         private DataGridViewTextBoxColumn Anul;
         private DataGridViewTextBoxColumn Pret;
+        private DataGridViewTextBoxColumn Stoc;
         private DataGridViewTextBoxColumn Status;
         private DataGridViewButtonColumn colBuy;
         private DataGridViewButtonColumn colBorrow;

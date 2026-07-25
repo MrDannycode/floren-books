@@ -24,6 +24,7 @@ namespace WinFormsAppV3FlorenBooksV3
 
                 ALTER TABLE books ADD COLUMN IF NOT EXISTS cover_image_path TEXT;
                 ALTER TABLE books ADD COLUMN IF NOT EXISTS exemplare INT NOT NULL DEFAULT 1;
+                ALTER TABLE books ADD COLUMN IF NOT EXISTS stoc_vanzare INT NOT NULL DEFAULT 10;
 
                 CREATE TABLE IF NOT EXISTS purchased_books (
                     id SERIAL PRIMARY KEY,
@@ -47,8 +48,8 @@ namespace WinFormsAppV3FlorenBooksV3
         {
             using var connection = DatabaseHelper.GetConnection();
             var query = @"
-                INSERT INTO books (titlu, autor, editura, anul, pret, cover_image_path, exemplare)
-                VALUES (@titlu, @autor, @editura, @anul, @pret, @coverImagePath, @exemplare)";
+                INSERT INTO books (titlu, autor, editura, anul, pret, cover_image_path, exemplare, stoc_vanzare)
+                VALUES (@titlu, @autor, @editura, @anul, @pret, @coverImagePath, @exemplare, @stocVanzare)";
 
             using var command = new NpgsqlCommand(query, connection);
             command.Parameters.AddWithValue("titlu", book.Titlu);
@@ -58,6 +59,7 @@ namespace WinFormsAppV3FlorenBooksV3
             command.Parameters.AddWithValue("pret", book.Pret.HasValue ? book.Pret.Value : DBNull.Value);
             command.Parameters.AddWithValue("coverImagePath", string.IsNullOrWhiteSpace(book.CoverImagePath) ? DBNull.Value : book.CoverImagePath);
             command.Parameters.AddWithValue("exemplare", book.Exemplare > 0 ? book.Exemplare : 1);
+            command.Parameters.AddWithValue("stocVanzare", book.StocVanzare >= 0 ? book.StocVanzare : 10);
 
             command.ExecuteNonQuery();
         }
@@ -69,6 +71,17 @@ namespace WinFormsAppV3FlorenBooksV3
             var query = "UPDATE books SET exemplare = @exemplare WHERE id = @bookId";
             using var command = new NpgsqlCommand(query, connection);
             command.Parameters.AddWithValue("exemplare", exemplare);
+            command.Parameters.AddWithValue("bookId", bookId);
+            command.ExecuteNonQuery();
+        }
+
+        public static void SetBookStocVanzare(int bookId, int stocVanzare)
+        {
+            if (stocVanzare < 0) throw new ArgumentException("Stocul nu poate fi negativ.");
+            using var connection = DatabaseHelper.GetConnection();
+            var query = "UPDATE books SET stoc_vanzare = @stocVanzare WHERE id = @bookId";
+            using var command = new NpgsqlCommand(query, connection);
+            command.Parameters.AddWithValue("stocVanzare", stocVanzare);
             command.Parameters.AddWithValue("bookId", bookId);
             command.ExecuteNonQuery();
         }
@@ -86,11 +99,17 @@ namespace WinFormsAppV3FlorenBooksV3
                     b.pret,
                     b.cover_image_path,
                     b.exemplare,
+                    b.stoc_vanzare,
                     (
                         SELECT COUNT(*)
                         FROM borrowed_books bb
                         WHERE bb.book_id = b.id AND bb.return_date IS NULL
-                    ) AS active_borrows
+                    ) AS active_borrows,
+                    (
+                        SELECT COUNT(*)
+                        FROM purchased_books pb
+                        WHERE pb.book_id = b.id
+                    ) AS purchased_count
                 FROM books b
                 ORDER BY b.id";
             using var command = new NpgsqlCommand(query, connection);
@@ -99,10 +118,20 @@ namespace WinFormsAppV3FlorenBooksV3
             while (reader.Read())
             {
                 int exemplare = reader.GetInt32(7);
-                long activeBorrows = reader.GetInt64(8);
+                int stocVanzare = reader.GetInt32(8);
+                long activeBorrows = reader.GetInt64(9);
+                long purchasedCount = reader.GetInt64(10);
+                
+                int stocRamas = Math.Max(0, stocVanzare - (int)purchasedCount);
+
                 string status = activeBorrows >= exemplare
                     ? "Imprumutata"
                     : $"Disponibila ({exemplare - activeBorrows}/{exemplare})";
+
+                if (stocRamas == 0)
+                {
+                    status += " | Stoc epuizat";
+                }
 
                 var book = new Book
                 {
@@ -114,6 +143,8 @@ namespace WinFormsAppV3FlorenBooksV3
                     Pret = reader.IsDBNull(5) ? (decimal?)null : reader.GetDecimal(5),
                     CoverImagePath = reader.IsDBNull(6) ? null : reader.GetString(6),
                     Exemplare = exemplare,
+                    StocVanzare = stocVanzare,
+                    StocRamas = stocRamas,
                     Status = status
                 };
                 books.Add(book);
@@ -136,6 +167,12 @@ namespace WinFormsAppV3FlorenBooksV3
                     b.pret,
                     b.cover_image_path,
                     b.exemplare,
+                    b.stoc_vanzare,
+                    (
+                        SELECT COUNT(*)
+                        FROM purchased_books pb
+                        WHERE pb.book_id = b.id
+                    ) AS purchased_count,
                     CASE
                         WHEN EXISTS (
                             SELECT 1
@@ -168,6 +205,10 @@ namespace WinFormsAppV3FlorenBooksV3
 
             while (reader.Read())
             {
+                int stocVanzare = reader.GetInt32(8);
+                long purchasedCount = reader.GetInt64(9);
+                int stocRamas = Math.Max(0, stocVanzare - (int)purchasedCount);
+
                 books.Add(new Book
                 {
                     Id = reader.GetInt32(0),
@@ -178,7 +219,9 @@ namespace WinFormsAppV3FlorenBooksV3
                     Pret = reader.IsDBNull(5) ? (decimal?)null : reader.GetDecimal(5),
                     CoverImagePath = reader.IsDBNull(6) ? null : reader.GetString(6),
                     Exemplare = reader.GetInt32(7),
-                    Status = reader.GetString(8)
+                    StocVanzare = stocVanzare,
+                    StocRamas = stocRamas,
+                    Status = reader.GetString(10)
                 });
             }
 
